@@ -80,6 +80,7 @@ ERROR_PREFIX="ERROR ::"
 WARNING_PREFIX="WARNING ::"
 HOOK=1
 FOUND=0
+CONSOLE_PATH="app/console"
 
 if [[ $# < 1 ]]; then
     echo "$ERROR_PREFIX Dame un argumento madafaka! (start/stop/restart/enter/logs/console/ccode/cache/destroy/composer)";
@@ -129,9 +130,13 @@ fi
 
 # Symfony console handling
 if [[ $1 == "console" ]]; then
-     $EXEC $CONTAINER $BASH_C "php app/console $2 $3 $4";
-     FOUND=1
+    if [ ! -f $CONSOLE_PATH ]; then
+        CONSOLE_PATH="bin/console"
+    fi
+    $EXEC $CONTAINER $BASH_C "php $CONSOLE_PATH $2 $3 $4";
+    FOUND=1
 fi
+
 
 # Code handling (pre-commit hook)
 if [[ $1 == "ccode" ]]; then
